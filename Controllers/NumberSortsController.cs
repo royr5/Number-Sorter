@@ -74,12 +74,14 @@ namespace Number_Sorter.Controllers
 
                     _context.Add(numberSort);
                     await _context.SaveChangesAsync();
+                    // Set success message after database entry is successful.
                     TempData["SuccessMessage"] = "Your numbers have been sorted.";
                     return RedirectToAction(nameof(Index));
 
                 }
                 catch
                 {
+                    // Set error message if numbers haven't been sorted.
                     TempData["ErrorMessage"] = "Your numbers have'nt been sorted.";
 
                 }
