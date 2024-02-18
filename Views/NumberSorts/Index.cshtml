@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Number_Sorter.Models.NumberSort>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+    <a asp-action="Create">Sort Your Numbers</a>
+</p>
+<p><a asp-action="ExportToJson">Export all sorts as JSON</a></p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Sorted numbers
+            </th>
+            <th>
+                Sorted direction
+            </th>
+            <th>
+                Time taken for sort (ms)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortedNumbers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortedDirection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SortTime)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

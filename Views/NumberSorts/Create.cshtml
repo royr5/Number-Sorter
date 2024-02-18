@@ -1,0 +1,39 @@
+﻿@model Number_Sorter.Models.NumberSort
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SortedNumbers" class="control-label">Enter numbers</label>
+                <input asp-for="SortedNumbers" class="form-control" placeholder="e.g. 5, 3, 8, 1"/>
+                <span asp-validation-for="SortedNumbers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SortedDirection" class="control-label">Choose sort direction</label>
+                <select asp-for="SortedDirection" class="form-control">
+                    <option value="Ascending">Ascending</option>
+                    <option value="Descending">Descending</option>
+                </select>
+                <span asp-validation-for="SortedDirection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sort Numbers" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to all sorts</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
