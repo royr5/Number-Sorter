@@ -38,39 +38,52 @@ namespace Number_Sorter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SortedNumbers,SortedDirection,SortTime")] NumberSort numberSort)
         {
+           
             if (ModelState.IsValid)
             {
-                // Turns string of numbers separated by commas into array of numbers.
-                int[] nums = Array.ConvertAll(numberSort.SortedNumbers.Split(','), int.Parse);
-
-                // Starts the stopwatch to record the time taken to do the sort.
-                var time = Stopwatch.StartNew();
-                
-                if (numberSort.SortedDirection == "Ascending")
+                try
                 {
-                    // Sorts array of numbers in ascending order.
-                    Array.Sort(nums);
+                    // Turns string of numbers separated by commas into array of numbers.
+                    int[] nums = Array.ConvertAll(numberSort.SortedNumbers.Split(','), int.Parse);
 
-                } else if (numberSort.SortedDirection == "Descending")
+                    // Starts the stopwatch to record the time taken to do the sort.
+                    var time = Stopwatch.StartNew();
+
+                    if (numberSort.SortedDirection == "Ascending")
+                    {
+                        // Sorts array of numbers in ascending order.
+                        Array.Sort(nums);
+
+                    }
+                    else if (numberSort.SortedDirection == "Descending")
+                    {
+                        // Sorts array of numbers in descending order.
+                        Array.Sort(nums);
+                        Array.Reverse(nums);
+                    }
+
+                    // Stops the stopwatch to record the time taken to do the sort.
+                    time.Stop();
+
+                    // Changes SortedNumbers from an array of numbers to a string of comma separated numbers that are sorted.
+                    numberSort.SortedNumbers = string.Join(",", nums);
+
+                    // SortTime is also recorded in milliseconds in the database.
+                    numberSort.SortTime = time.Elapsed.TotalMilliseconds;
+
+
+                    _context.Add(numberSort);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Your numbers have been sorted.";
+                    return RedirectToAction(nameof(Index));
+
+                }
+                catch
                 {
-                    // Sorts array of numbers in descending order.
-                    Array.Sort(nums);
-                    Array.Reverse(nums);    
+                    TempData["ErrorMessage"] = "Your numbers have'nt been sorted.";
+
                 }
 
-                // Stops the stopwatch to record the time taken to do the sort.
-                time.Stop();
-
-                // Changes SortedNumbers from an array of numbers to a string of comma separated numbers that are sorted.
-                numberSort.SortedNumbers = string.Join(",", nums);
-
-                // SortTime is also recorded in milliseconds in the database.
-                numberSort.SortTime = time.Elapsed.TotalMilliseconds;
-
-
-                _context.Add(numberSort);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
             return View(numberSort);
         }
